@@ -1,0 +1,17 @@
+/* Navigation Button */
+.blogSlider .swiper-button-prev,
+.blogSlider .swiper-button-next{
+    width: 20px;
+    height: 20px;
+    ;
+    color: #000;
+    
+}
+
+/* Arrow Size */
+.blogSlider .swiper-button-prev::after,
+.blogSlider .swiper-button-next::after{
+    font-size: 12px;
+    font-weight: 700;
+}
+

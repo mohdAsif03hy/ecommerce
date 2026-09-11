@@ -1,0 +1,4 @@
+.mySwiper {
+  --swiper-navigation-size: 22px; /* Default 44px hota hai */
+  margin: 0 10px;
+}

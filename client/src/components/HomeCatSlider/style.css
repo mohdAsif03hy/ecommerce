@@ -1,0 +1,90 @@
+.mySwiper {
+    --swiper-navigation-size: 22px;
+    /* Default 44px hota hai */
+    
+}
+/* =========================
+   PREMIUM CATEGORY CARD
+========================= */
+
+.HomeCatSlider .item {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid transparent;
+
+    transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        box-shadow 0.35s ease,
+        border-color 0.35s ease,
+        background-color 0.35s ease;
+}
+
+
+/* IMAGE */
+.HomeCatSlider .item img {
+    transform: scale(1) translateY(0);
+    
+    transition:
+        transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+        filter 0.4s ease;
+
+    will-change: transform;
+}
+
+
+/* TEXT */
+.HomeCatSlider .item h3 {
+    transition:
+        transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+        color 0.3s ease;
+}
+
+
+/* =========================
+   HOVER EFFECT
+========================= */
+
+.HomeCatSlider .item:hover {
+    transform: translateY(-5px);
+
+    border-color: rgba(0, 0, 0, 0.06);
+
+    box-shadow:
+        0 4px 10px rgba(0, 0, 0, 0.03),
+        0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Image premium zoom */
+.HomeCatSlider .item:hover img {
+    transform: scale(1.09) translateY(-2px);
+    filter: brightness(1.03) contrast(1.02);
+}
+
+
+/* Text animation */
+.HomeCatSlider .item:hover h3 {
+    transform: translateY(-1px);
+    color: #ff5252;
+}
+
+
+/* =========================
+   CLICK EFFECT
+========================= */
+
+.HomeCatSlider .item:active {
+    transform: translateY(-2px) scale(0.98);
+}
+
+
+/* =========================
+   SMOOTHER GPU RENDERING
+========================= */
+
+.HomeCatSlider .item,
+.HomeCatSlider .item img {
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+}

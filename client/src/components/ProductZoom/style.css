@@ -1,0 +1,62 @@
+.zoomProductSliderThumb .swiper-slide{
+    height: 90px !important;
+
+}
+
+.zoomProductSliderThumb .swiper-wrapper{
+padding-top: 30px !important;
+
+}
+
+
+
+.zoomProductSliderThumb{
+    height: 60vh !important;
+    overflow: hidden !important;
+}
+
+.zoomContainer{
+    height: 355px !important;
+    overflow: hidden !important;
+    border-radius: 10px !important;
+}
+
+.zoomProductSliderThumb .swiper-button-next{
+    bottom:0px !important;
+    left: 22px !important;
+    top: inherit  !important;
+    height: 30px !important;
+    border-radius: 0px !important;
+    background-color:white !important;
+    width: 100% !important;
+
+}
+
+.zoomProductSliderThumb .swiper-button-prev{
+    top: 0px !important;
+    left: 22px !important;
+    height: 30px !important;
+    border-radius: 0px !important;
+    background-color: white !important;
+    font-size: 16px !important;
+    width: 100% !important;
+    
+
+}
+
+
+.zoomProductSliderThumb .swiper-button-prev,
+.zoomProductSliderThumb .swiper-button-next {
+    font-size: 25px !important;
+}
+
+/* .zoomProductSliderThumb .swiper-slide .item{
+    opacity: 0.3;
+
+}
+
+.zoomProductSliderThumb .swiper-slide-active .item{
+    opacity: 1;
+
+} */
+
