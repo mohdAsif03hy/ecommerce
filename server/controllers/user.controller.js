@@ -404,12 +404,11 @@ export async function loginUserController(req, res) {
         /*
         Store tokens in browser cookies.
         */
-        res.cookie(
+       res.cookie(
             "accessToken",
             accessToken,
             cookieOption
         );
-
         res.cookie(
             "refreshToken",
             refreshToken,
@@ -425,7 +424,9 @@ export async function loginUserController(req, res) {
         return res.status(200).json({
             message: "Login successfully",
             success: true,
-            error: false
+            error: false,
+            accessToken: accessToken,
+            refreshToken: refreshToken,
         });
 
     } catch (error) {
@@ -731,7 +732,7 @@ export async function forgetPasswordController(req, res) {
 
         if (!user) {
             return res.status(400).json({
-                message: "Email not available",
+                message: "Email not available please register first",
                 success: false,
                 error: true
             });
@@ -969,7 +970,7 @@ export async function refreshTokenController(req, res) {
 //user get 
 export async function userDetailsController(req,res){
     try{
-        const userId = req.userId;
+        const userId =req.userId;
         const user = await UserModel.findById(userId).select('-password -refresh_token');
         return res.json({
             message:"user details",

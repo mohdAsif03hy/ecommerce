@@ -4,7 +4,7 @@ import Home from './pages/Home/Home'
 import ProductListing from './pages/ProductListing/ProductListing'
 import Footer from './components/Footer/Footer'
 import ProductDetails from './pages/ProductDetails/ProductDetails'
-import { createContext, useState } from 'react'
+import { createContext, useEffect, useState } from 'react'
 import { IoIosClose } from "react-icons/io";
 import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
@@ -24,6 +24,14 @@ import Checkout from './pages/Checkout/Checkout'
 import MyAccount from './pages/MyAccount/MyAccount'
 import MyList from './pages/MyList/MyList'
 import Orders from './pages/Orders/Orders'
+import { fetchDataFromApi } from './utils/api'
+const apiUrl = import.meta.env.VITE_API_URL;
+
+
+
+
+
+
 
 
 export const MyContext = createContext();
@@ -32,13 +40,13 @@ const App = () => {
   const [maxWidth, setMaxWidth] = useState('md');
   const [fullWidth, setFullWidth] = useState(true);
   const [openCartPanel, setOpenCartPanel] = useState(false);
-  const [isLogin , setIsLogin ] = useState(true);
-
+  const [isLogin , setIsLogin ] = useState(false);
+  const [userData, setUserData] = useState(null);
 
   const toggleCartPanel = (newOpen) => () => {
     setOpenCartPanel(newOpen);
   };
-
+  
 
   const [openProductDetailModal, setOpenProductDetailModal] = useState(false);
 
@@ -56,7 +64,19 @@ const App = () => {
         toast(message);
     }
 };
-
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setIsLogin(true);
+      fetchDataFromApi(`/api/user/user-details?token=${token}`, { withCredentials: true })
+      .then((res) => {
+        // console.log('User details:', res.data);
+        setUserData(res.data);
+      });
+    } else {
+      setIsLogin(false);
+    }
+  }, [isLogin]);
 
   const values = {
     openProductDetailModal,
@@ -67,6 +87,9 @@ const App = () => {
     openAlertBox,
     isLogin,
     setIsLogin,
+    apiUrl,
+    userData,
+    setUserData
   };
 
   return (
@@ -89,7 +112,7 @@ const App = () => {
         </Routes>
         <Footer />
       </MyContext.Provider>
-    <Toaster/>
+
       <Dialog
         open={openProductDetailModal}
         fullWidth={fullWidth}
@@ -122,6 +145,9 @@ const App = () => {
         </div>
       <CartPanel/>
       </Drawer>
+
+    <Toaster/>
+
     </>
   )
 }

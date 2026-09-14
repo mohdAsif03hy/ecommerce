@@ -12,7 +12,6 @@ import { useContext, useState } from 'react';
 import { MyContext } from '../../App';
 import Button from '@mui/material/Button';
 import { TbUserHeart } from "react-icons/tb";
-
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Divider from '@mui/material/Divider';
@@ -20,24 +19,43 @@ import { CiUser } from "react-icons/ci";
 import { HiOutlineShoppingBag } from "react-icons/hi2";
 import { IoHeartOutline } from "react-icons/io5";
 import { IoLogOutOutline } from "react-icons/io5";
+import { fetchDataFromApi } from '../../utils/api';
 
 
 const Header = () => {
+    const context = useContext(MyContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
+
+    const logout = () => {
+        setAnchorEl(null);
+        fetchDataFromApi(`/api/user/logout?token=${localStorage.getItem('accessToken')}`, {withCredentials: true})
+            .then((res) => {
+                if(res?.error === false) {
+                    localStorage.removeItem('accessToken');
+                    context.setIsLogin(false);
+                    localStorage.removeItem('accessToken',res?.data?.accessToken);
+                    localStorage.removeItem('refreshToken',res?.data?.refreshToken);
+                }
+            })
+            .catch((error) => {
+                // console.error('Error during logout:', error);
+            });
+
+    }
     const handleClose = () => {
         setAnchorEl(null);
-    };
+    }
+
 
     const { setOpenCartPanel } = useContext(MyContext);
 
     const maxVisibleNotifications = 9;
     const unreadNotificationsCount = 9;
-    const context = useContext(MyContext);
 
 
     return (
@@ -127,21 +145,19 @@ const Header = () => {
                                         >
                                             {/* Profile Header */}
                                             <div className="px-4 py-2 flex items-center gap-3 min-w-[260px]">
-
                                                 {/* Profile Picture */}
                                                 <img
-                                                    src="/profile.jpg"
+                                                    src={context.userData?.profilePicture || "https://imgs.search.brave.com/pdN1zMdlb8OwDKLeFNoE0ViMB0Yod1uHyjOZzjNweNc/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9weGNv/bGxlY3Rpb25zLmNv/LmluL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI1LzA4L2luc3Rh/Z3JhbS1kcC1mb3It/Z2lybHMtYWVzdGhl/dGljLTExLmpwZw"}
                                                     alt="Profile"
                                                     className="w-[45px] h-[45px] rounded-full object-cover border border-gray-200"
                                                 />
-
                                                 {/* Name + Email */}
                                                 <div className="flex flex-col min-w-0">
                                                     <h4 className="text-[13px] font-[600] text-gray-800 truncate">
-                                                        Asif
+                                                        {context.userData?.name || "User Name"}
                                                     </h4>
                                                     <p className="text-[12px] text-gray-500 truncate">
-                                                        asif@gmail.com
+                                                        {context.userData?.email || "user@gmail.com"}
                                                     </p>
                                                 </div>
                                             </div>
@@ -177,10 +193,10 @@ const Header = () => {
                                             </MenuItem>
                                             </Link>
                                             <Divider />
-                                            <Link to={"/logout"} className='w-full block'>
+                                            <Link to={"/login"} className='w-full block'>
 
                                             <MenuItem
-                                                onClick={handleClose}
+                                                onClick={logout}
                                                 className="flex gap-2 !py-1"
                                             >
                                                 <IoLogOutOutline className="text-[20px]" />

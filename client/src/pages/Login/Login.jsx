@@ -6,64 +6,161 @@ import { Link } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import { MyContext } from '../../App';
+import CircularProgress from '@mui/material/CircularProgress';
+import { postData } from '../../utils/api';
+
 
 const Login = () => {
 
     const [isShowPassword, setIsShowPassword] = useState(false);
-
+    const [isLoading, setIsLoading] = useState(false);
     const [formFields, setFormFields] = useState({
         email: "",
         password: ""
     });
-
-    
     const context = useContext(MyContext);
-
     const navigate = useNavigate();
 
-    const forgetPassword = () => {
+const forgetPassword = async () => {
+    // ============================
+    // Get email safely
+    // ============================
+    const email = formFields.email?.trim();
 
-        if (formFields.email.trim() !== "") {
+    // ============================
+    // Email validation
+    // ============================
+    if (!email) {
+        context.openAlertBox(
+            "error",
+            "Please enter your email"
+        );
+        return;
+    }
 
-            navigate("/verify");
+    try {
+        // ============================
+        // Send forgot password request
+        // ============================
+        const res = await postData(
+            "/api/user/forgot-password",
+            {
+                email: email
+            }
+        );
+
+        // console.log("Forgot Password Response:", res);
+
+        // ============================
+        // Success
+        // ============================
+        if (res?.error === false) {
+
+            // Save email only after OTP is successfully sent
+            localStorage.setItem(
+                "userEmail",
+                email
+            );
+
+            localStorage.setItem(
+                "actionType",
+                "forgotPassword"
+            );
 
             context.openAlertBox(
                 "success",
-                "OTP sent successfully"
+                res.message || "OTP sent successfully"
             );
 
-        } else {
+            navigate("/verify");
+
+        }
+
+        // ============================
+        // Backend error
+        // ============================
+        else {
 
             context.openAlertBox(
                 "error",
-                "Please enter your email"
+                res?.message ||
+                "Unable to send OTP"
             );
-
         }
-    };
+
+    } catch (error) {
+
+        console.error(
+            "Forgot password error:",
+            error
+        );
+
+        context.openAlertBox(
+            "error",
+            error?.message ||
+            "Something went wrong. Please try again."
+        );
+    }
+};
+
+
+
+const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!formFields.email || !formFields.password) {
+        context.openAlertBox(
+            "error",
+            "Please fill in all required fields."
+        );
+        return;
+    }
+
+    setIsLoading(true);
+
+    postData("/api/user/login", formFields,{withCredentials: true})
+        .then((res) => {
+            // console.log("Login successful:", res);
+
+            if (res.success) {
+                localStorage.setItem("accessToken", res.accessToken);
+                localStorage.setItem("refreshToken", res.refreshToken);
+
+                context.openAlertBox("success", res.message);
+                context.setIsLogin(true);
+                navigate("/");
+            } else {
+                context.openAlertBox("error", res.message);
+            }
+        })
+        .catch((error) => {
+            console.error("Login error:", error);
+
+            context.openAlertBox(
+                "error",
+                error.message || "Login failed"
+            );
+        })
+        .finally(() => {
+            setIsLoading(false);
+        });
+};
 
     return (
         <>
             <section className="section py-10">
                 <div className="container">
-
                     <div className="card shadow-md w-[400px] m-auto rounded-md bg-white p-5 px-10 flex flex-col items-center">
-
                         <h3 className="text-center text-[17px] text-black font-[600]">
                             Login to your account
                         </h3>
-
-                        <form className="w-[100%] mt-6">
-
+                        <form className="w-[100%] mt-6" onSubmit={handleSubmit}>
                             {/* Email */}
                             <div className="form-group w-full">
-
                                 <TextField
                                     id="outlined-email"
                                     type="email"
                                     label="Email *"
-                                    variant="outlined"
-                                    className="w-full"
                                     name="email"
                                     value={formFields.email}
                                     onChange={(e) =>
@@ -72,13 +169,13 @@ const Login = () => {
                                             email: e.target.value
                                         })
                                     }
+                                    variant="outlined"
+                                    className="w-full"
                                 />
-
                             </div>
 
                             {/* Password */}
                             <div className="form-group w-full relative">
-
                                 <TextField
                                     id="outlined-password"
                                     label="Password *"
@@ -126,8 +223,12 @@ const Login = () => {
                             {/* Login */}
                             <div className="flex items-center w-full mb-2">
 
-                                <Button className="btn-org btn-lg w-full">
-                                    Login
+                                <Button type="submit" className="btn-org btn-lg w-full">
+                                    {isLoading ? (
+                                        <CircularProgress size={24} color="inherit" />
+                                    ) : (
+                                        "Login"
+                                    )}
                                 </Button>
 
                             </div>
@@ -135,7 +236,6 @@ const Login = () => {
                             {/* Register */}
                             <p className="!text-[12px] text-center">
                                 Not Registered?
-
                                 <Link
                                     className="link font-[600] text-[#ff5252]"
                                     to="/register"
