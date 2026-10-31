@@ -6,20 +6,11 @@ const auth = async (req, res, next) => {
             req.cookies?.accessToken ||
             req.headers?.authorization?.split(" ")[1] ||
             req.query?.token;
-
-        if (!token) {
-            return res.status(401).json({
-                message: "Provide token",
-                error: true,
-                success: false
-            });
-        }
-
+            
         const decoded = jwt.verify(
             token,
             process.env.SECRET_KEY_ACCESS_TOKEN
         );
-
         if (!decoded?.id) {
             return res.status(401).json({
                 message: "Unauthorized access",
@@ -27,14 +18,10 @@ const auth = async (req, res, next) => {
                 success: false
             });
         }
-
         req.userId = decoded.id;
-
         next();
-
     } catch (error) {
         console.log("JWT ERROR:", error.message);
-
         return res.status(401).json({
             message: error.message,
             error: true,

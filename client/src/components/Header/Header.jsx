@@ -1,6 +1,6 @@
 import React from 'react';
 import Search from '../Search/Search';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { GiDivert, GiShoppingCart } from "react-icons/gi";
 import Badge from '@mui/material/Badge';
 import IconButton from '@mui/material/IconButton';
@@ -26,6 +26,7 @@ const Header = () => {
     const context = useContext(MyContext);
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
+    const navigate = useNavigate();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -40,6 +41,7 @@ const Header = () => {
                     context.setIsLogin(false);
                     localStorage.removeItem('accessToken',res?.data?.accessToken);
                     localStorage.removeItem('refreshToken',res?.data?.refreshToken);
+                    
                 }
             })
             .catch((error) => {
@@ -147,7 +149,7 @@ const Header = () => {
                                             <div className="px-4 py-2 flex items-center gap-3 min-w-[260px]">
                                                 {/* Profile Picture */}
                                                 <img
-                                                    src={context.userData?.profilePicture || "https://imgs.search.brave.com/pdN1zMdlb8OwDKLeFNoE0ViMB0Yod1uHyjOZzjNweNc/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9weGNv/bGxlY3Rpb25zLmNv/LmluL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI1LzA4L2luc3Rh/Z3JhbS1kcC1mb3It/Z2lybHMtYWVzdGhl/dGljLTExLmpwZw"}
+                                                    src={context.userData?.avatar || "https://imgs.search.brave.com/pdN1zMdlb8OwDKLeFNoE0ViMB0Yod1uHyjOZzjNweNc/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9weGNv/bGxlY3Rpb25zLmNv/LmluL3dwLWNvbnRl/bnQvdXBsb2Fkcy8y/MDI1LzA4L2luc3Rh/Z3JhbS1kcC1mb3It/Z2lybHMtYWVzdGhl/dGljLTExLmpwZw"}
                                                     alt="Profile"
                                                     className="w-[45px] h-[45px] rounded-full object-cover border border-gray-200"
                                                 />

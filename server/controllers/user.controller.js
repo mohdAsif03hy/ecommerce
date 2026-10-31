@@ -327,7 +327,7 @@ export async function loginUserController(req, res) {
         }
         if (user.verify_email !== true) {
             return res.status(400).json({
-                message: "Please verify your email yet please verify your email first",
+                message: "Please verify your email first",
                 success: false,
                 error: true
             });
@@ -522,6 +522,9 @@ export async function userAvatarController(req, res) {
 
         const userId = req.userId; // auth middleware
         const images = req.files;
+
+console.log("REQ.FILES:", req.files);
+console.log("REQ.BODY:", req.body);
 
         // Check userId
         if (!userId) {

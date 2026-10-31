@@ -7,6 +7,8 @@ import {
 import Dashboard from "./Pages/Dashboard/Dashboard";
 import Header from "./components/Header/Header.jsx";
 import Sidebar from "./components/Sidebar/Sidebar.jsx";
+import Login from "./Pages/Login/Login.jsx";
+import Signup from "./Pages/Signup/Signup.jsx";
 
 
 // Create Context
@@ -16,6 +18,7 @@ export const MyContext = createContext();
 const App = () => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isLogin, setIsLogin] = useState(false);
 
 
     const router = createBrowserRouter([
@@ -23,11 +26,8 @@ const App = () => {
             path: "/",
             element: (
                 <section className="main">
-
                     <Header />
-
                     <div className="contentMain flex">
-
                         {/* Sidebar */}
                         <div
                             className={`sidebarWrapper ${
@@ -47,13 +47,27 @@ const App = () => {
 
                 </section>
             )
+        },
+         {
+            path: "/login",
+            element: (
+                <Login/>
+            )
+        },
+        {
+            path: "/signup",
+            element: (
+                <Signup/>
+            )
         }
     ]);
 
 
     const values = {
         isSidebarOpen,
-        setIsSidebarOpen
+        setIsSidebarOpen,
+        isLogin,
+        setIsLogin
     };
 
 

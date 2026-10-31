@@ -125,7 +125,6 @@ const handleSubmit = (e) => {
             if (res.success) {
                 localStorage.setItem("accessToken", res.accessToken);
                 localStorage.setItem("refreshToken", res.refreshToken);
-
                 context.openAlertBox("success", res.message);
                 context.setIsLogin(true);
                 navigate("/");
@@ -135,7 +134,6 @@ const handleSubmit = (e) => {
         })
         .catch((error) => {
             console.error("Login error:", error);
-
             context.openAlertBox(
                 "error",
                 error.message || "Login failed"

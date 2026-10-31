@@ -36,3 +36,7 @@ body{
 th.MuiTableCell-root{ @apply bg-[#ccc] py-1}
 
 
+a.active button{
+    background: rgb(215, 212, 212) !important;
+    /* color: #fff !important; */
+}

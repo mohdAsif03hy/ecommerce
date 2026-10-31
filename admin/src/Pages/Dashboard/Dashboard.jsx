@@ -186,7 +186,6 @@ const Dashboard = () => {
 
                     image:
                         "https://images.unsplash.com/photo-1505740420928-5e560c06d30e",
-
                     quantity: 2,
 
                     price: "₹1,499",
